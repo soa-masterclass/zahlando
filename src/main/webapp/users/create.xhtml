@@ -12,6 +12,9 @@
       <h1>Create User</h1>
     
 	  <form jsf:id="form">
+	  		
+			<f:event listener="#{userManagedBean.validateAccount}" type="postValidate" />
+			
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
@@ -40,7 +43,7 @@
 				<label for="form:accountNumber">Account Number</label>
 				<input type="text" class="form-control" jsf:id="accountNumber"
 					required="required" jsf:required="true" jsf:value="#{userManagedBean.user.accNumber}"
-					placeholder="Enter Account Number" />
+					jsf:validator="accountNumberValidator" placeholder="Enter Account Number" />
 			</div>
 			<div class="row">
 				<div class="col-md-6">
