@@ -1,12 +1,17 @@
 package com.cgi.soa.masterclass.zahlando.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,30 +19,32 @@ import javax.persistence.Table;
 public class UserEntity {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
-	
-	@Basic
+
+	@Column(unique=true)
 	String email;
-	
+
 	@Basic
 	String firstname;
-	
+
 	@Basic
 	String lastname;
-	
+
 	@Basic
 	Integer accNumber;
-	
+
 	@Basic
 	String accFirstname;
-	
+
 	@Basic
 	String accLastname;
-	
+
 	@Basic
 	BigDecimal balance;
-	
+
+	@OneToMany(mappedBy = "sender", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	List<TransactionEntity> transactions;
 
 	public Integer getId() {
 		return id;
@@ -101,5 +108,13 @@ public class UserEntity {
 
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
+	}
+
+	public List<TransactionEntity> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<TransactionEntity> transactions) {
+		this.transactions = transactions;
 	}
 }

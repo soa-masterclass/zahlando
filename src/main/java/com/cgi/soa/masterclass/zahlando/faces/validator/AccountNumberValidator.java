@@ -8,20 +8,18 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 
-import com.cgi.soa.masterclass.zahlando.service.BankWS;
+import com.cgi.soa.masterclass.zahlando.samplebank.ws.BankWeb;
 
 @FacesValidator("accountNumberValidator")
 public class AccountNumberValidator implements Validator {
 
 	@Inject
-	private BankWS bankws;
+	private BankWeb bankService;
 
 	@Override
-	public void validate(FacesContext arg0, UIComponent arg1, Object arg2)
+	public void validate(FacesContext context, UIComponent ui, Object accNumber)
 			throws ValidatorException {
-		// TODO Auto-generated method stub
-
-		if (!bankws.getWebService().isAccountExist(Integer.parseInt((String) arg2))) {
+		if (!bankService.isAccountExist((Integer) accNumber)) {
 			throw new ValidatorException(
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							"Account existiert nicht!", ""));

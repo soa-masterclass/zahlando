@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cgi.soa.masterclass.zahlando.model.UserEntity;
-import com.cgi.soa.masterclass.zahlando.service.BankWS;
+import com.cgi.soa.masterclass.zahlando.samplebank.ws.BankWeb;
 import com.cgi.soa.masterclass.zahlando.service.PersistenceDAO;
 
 @Named
@@ -20,15 +20,19 @@ import com.cgi.soa.masterclass.zahlando.service.PersistenceDAO;
 public class UserManagedBean {
 
 	@Inject
-	PersistenceDAO persistence;
+	private PersistenceDAO persistence;
 
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	@Inject
-	BankWS bankWs;
+	private BankWeb bankService;
 
-	UserEntity user;
+	private UserEntity user;
+	
+	public UserManagedBean(){
+		user = new UserEntity();
+	}
 
 	public List<UserEntity> getUsers() {
 		return persistence.getAllUser();
@@ -40,14 +44,35 @@ public class UserManagedBean {
 	}
 
 	public UserEntity getUser() {
-		if (user == null) {
-			user = new UserEntity();
-		}
 		return user;
 	}
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	public PersistenceDAO getPersistence() {
+		return persistence;
+	}
+
+	public void setPersistence(PersistenceDAO persistence) {
+		this.persistence = persistence;
+	}
+
+	public FacesContext getContext() {
+		return context;
+	}
+
+	public void setContext(FacesContext context) {
+		this.context = context;
+	}
+
+	public BankWeb getBankService() {
+		return bankService;
+	}
+
+	public void setBankService(BankWeb bankService) {
+		this.bankService = bankService;
 	}
 
 	public void validateAccount(ComponentSystemEvent event) {
@@ -72,7 +97,7 @@ public class UserManagedBean {
 			return;
 		}
 		
-		if(!bankWs.getWebService().isAccountOwner(Integer.valueOf(accountNumber), accountFirstName, accountLastName)){
+		if(!bankService.isAccountOwner(Integer.valueOf(accountNumber), accountFirstName, accountLastName)){
 			FacesMessage msg = new FacesMessage("This account is not belong to the correct owner.");
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			context.addMessage(accountNumberUi.getClientId(), msg);
